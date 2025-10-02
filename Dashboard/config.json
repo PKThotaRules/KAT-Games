@@ -1,0 +1,45 @@
+[
+  {
+    "id": "tic-tac-toe",
+    "name": "Tic Tac Toe",
+    "description": "A classic game of X's and O's. Try to get three in a row!",
+    "imageUrl": "https://placehold.co/400x300/38bdf8/ffffff?text=Tic+Tac+Toe",
+    "gameUrl": "https://playpager.com/embed/tictactoe/index.html"
+  },
+  {
+    "id": "snake",
+    "name": "Classic Snake",
+    "description": "Guide the snake to eat the food and grow longer. Don't hit the walls!",
+    "imageUrl": "https://placehold.co/400x300/4ade80/ffffff?text=Snake",
+    "gameUrl": "https://playpager.com/embed/snake/index.html"
+  },
+  {
+    "id": "2048",
+    "name": "2048",
+    "description": "Slide the tiles to merge numbers and try to reach the 2048 tile.",
+    "imageUrl": "https://placehold.co/400x300/fb923c/ffffff?text=2048",
+    "gameUrl": "https://play2048.co/"
+  },
+  {
+    "id": "flappy-bird",
+    "name": "Flappy Bird",
+    "description": "Tap to make the bird fly and guide it through the pipes.",
+    "imageUrl": "https://placehold.co/400x300/facc15/ffffff?text=Flappy+Bird",
+    "gameUrl": "https://flappybird.io/"
+  },
+  {
+    "id": "pac-man",
+    "name": "Pac-Man",
+    "description": "Eat all the dots in the maze while avoiding the ghosts!",
+    "imageUrl": "https://placehold.co/400x300/a78bfa/ffffff?text=Pac-Man",
+    "gameUrl": "https://cdn.htmlgames.com/ClassicPac/"
+  },
+  {
+    "id": "tetris",
+    "name": "Tetris",
+    "description": "Arrange the falling blocks to create and clear horizontal lines.",
+    "imageUrl": "https://placehold.co/400x300/f87171/ffffff?text=Tetris",
+    "gameUrl": "https://playtetris.online/"
+  }
+]
+

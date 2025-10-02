@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAT Games</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f9ff; /* Light blue background */
+        }
+        .kat-games-title {
+            font-family: 'Bangers', cursive;
+            background: linear-gradient(45deg, #f87171, #fb923c, #facc15, #4ade80, #38bdf8, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            animation: gradient-animation 5s ease infinite;
+            background-size: 200% 200%;
+        }
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body class="antialiased text-slate-800">
+
+    <div id="app-container" class="container mx-auto p-4 md:p-6 max-w-7xl">
+
+        <!-- Home Page View -->
+        <div id="home-page">
+            <header class="text-center my-8">
+                <h1 class="kat-games-title text-7xl md:text-9xl drop-shadow-lg">KAT Games</h1>
+            </header>
+
+            <main id="game-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+                <!-- Game cards will be dynamically inserted here -->
+            </main>
+        </div>
+
+        <!-- Game Page View (Initially hidden) -->
+        <div id="game-page" class="hidden">
+            <header class="flex items-center justify-between mb-4">
+                 <button id="back-button" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                    &larr; Back to Games
+                </button>
+                <h2 id="game-title" class="text-2xl md:text-4xl font-bold text-slate-700"></h2>
+            </header>
+            <div id="game-frame-container" class="w-full h-[80vh] bg-black rounded-xl shadow-2xl overflow-hidden">
+                <!-- iFrame with the game will be loaded here -->
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const homePage = document.getElementById('home-page');
+            const gamePage = document.getElementById('game-page');
+            const gameListContainer = document.getElementById('game-list');
+            const gameFrameContainer = document.getElementById('game-frame-container');
+            const gameTitle = document.getElementById('game-title');
+            const backButton = document.getElementById('back-button');
+
+            // --- Function to fetch game data and render the list ---
+            async function loadGames() {
+                try {
+                    const response = await fetch('./Dashboard/config.json');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const games = await response.json();
+                    renderGameList(games);
+                } catch (error) {
+                    console.error("Could not load games:", error);
+                    gameListContainer.innerHTML = `<p class="text-center text-red-500 col-span-full">Could not load games. Please check config.json and try again.</p>`;
+                }
+            }
+            
+            // --- Function to render the list of games on the home page ---
+            function renderGameList(games) {
+                gameListContainer.innerHTML = ''; // Clear existing content
+                games.forEach(game => {
+                    const gameCard = document.createElement('div');
+                    gameCard.className = 'bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transition-transform transform hover:scale-105 hover:shadow-2xl';
+                    gameCard.innerHTML = `
+                        <img src="${game.imageUrl}" alt="${game.name}" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/64748b?text=Image+Missing';">
+                        <div class="p-4">
+                            <h3 class="font-bold text-xl mb-1">${game.name}</h3>
+                            <p class="text-slate-600 text-sm">${game.description}</p>
+                        </div>
+                    `;
+                    gameCard.addEventListener('click', () => showGame(game));
+                    gameListContainer.appendChild(gameCard);
+                });
+            }
+
+            // --- Function to display the selected game ---
+            function showGame(game) {
+                homePage.classList.add('hidden');
+                gamePage.classList.remove('hidden');
+                
+                gameTitle.textContent = game.name;
+
+                // Create and append iframe
+                gameFrameContainer.innerHTML = ''; // Clear previous game
+                const iframe = document.createElement('iframe');
+                iframe.src = game.gameUrl;
+                iframe.className = 'w-full h-full border-0';
+                iframe.setAttribute('frameborder', '0');
+                iframe.setAttribute('allowfullscreen', 'true');
+                gameFrameContainer.appendChild(iframe);
+
+                window.scrollTo(0, 0); // Scroll to top
+            }
+
+            // --- Function to show the home page ---
+            function showHomePage() {
+                gamePage.classList.add('hidden');
+                homePage.classList.remove('hidden');
+                gameFrameContainer.innerHTML = ''; // Stop the game by removing the iframe
+            }
+
+            // --- Event Listeners ---
+            backButton.addEventListener('click', showHomePage);
+
+            // --- Initial Load ---
+            loadGames();
+        });
+    </script>
+
+</body>
+</html>
+
